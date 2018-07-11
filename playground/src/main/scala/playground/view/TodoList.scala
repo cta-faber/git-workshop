@@ -13,10 +13,10 @@ import playground.util.Colors
 
 object TodoList {
   def apply(): Node = {
-    val todos: Var[Seq[Todo]] = Var(
+    val items: Var[Seq[Todo]] = Var(
       Seq(
-        Todo("learn usefull git commands", isCompleted = false),
-        Todo("play with Scala.js", isCompleted = false)
+        Todo("learn usefull git commands", isDone = false),
+        Todo("play with Scala.js", isDone = false)
       )
     )
 
@@ -30,8 +30,8 @@ object TodoList {
           { presentation }
         </div>
 
-        <ul class={ Style.todos.htmlClass }>
-          { todos.map(_.zipWithIndex.map {
+        <ul class={ Style.items.htmlClass }>
+          { items.map(_.zipWithIndex.map {
             case (todo, index) => todoItem(todo, index)
           } ) }
         </ul>
@@ -48,7 +48,7 @@ object TodoList {
               input.value.trim match {
                 case "" =>
                 case todo =>
-                  todos.update(Todo(todo, isCompleted = false) +: _)
+                  items.update(Todo(todo, isDone = false) +: _)
                   input.value = ""
               }
             case _ =>
@@ -57,10 +57,10 @@ object TodoList {
       />
 
     lazy val presentation =
-      todos.map {
+      items.map {
         case xs =>
           val totalCount = xs.length
-          val uncompletedTodos = xs.filter(_.isCompleted == false)
+          val uncompletedTodos = xs.filter(_.isDone == false)
           val uncompletedCount = uncompletedTodos.length
 
           val among =
@@ -83,12 +83,12 @@ object TodoList {
       <li
         class={ StyleUtil.classes(
           Style.todo.htmlClass -> true,
-          Style.completedTodo.htmlClass -> todo.isCompleted
+          Style.completedTodo.htmlClass -> todo.isDone
         ) }
       >
         <span
-          onclick={ () => todos.update { xs =>
-            xs.updated(index, todo.copy(isCompleted = !todo.isCompleted))
+          onclick={ () => items.update { xs =>
+            xs.updated(index, todo.copy(isDone = !todo.isDone))
           } }
         >
           { todo.title }
@@ -96,7 +96,7 @@ object TodoList {
 
         <button
           class={ Style.removeTodo.htmlClass }
-          onclick={ () => todos.update(_.patch(index, Nil, 1)) }
+          onclick={ () => items.update(_.patch(index, Nil, 1)) }
         >
           ✗
         </button>
@@ -120,7 +120,7 @@ object TodoList {
       marginBottom(2.em)
     )
 
-    val todos = style(
+    val items = style(
       marginLeft(2.em),
       listStyleType := "disc"
     )
