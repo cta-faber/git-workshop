@@ -24,6 +24,10 @@ object TodoList {
       <div class={ Style.root.htmlClass }>
         You can add or remove todo items.<br /><br />
 
+        <div>
+          { todosSize }
+        </div>
+
         { addTodo }
 
         <div class={ Style.presentation.htmlClass }>
@@ -36,6 +40,8 @@ object TodoList {
           } ) }
         </ul>
       </div>
+
+    lazy val todosSize = todos.map(_.map(t => "=").mkString + ">")
 
     lazy val addTodo =
       <input
