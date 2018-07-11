@@ -25,7 +25,7 @@ object TodoList {
         You can add or remove todo items.<br /><br />
 
         <div>
-          { todosSize }
+          { todosSize } >
         </div>
 
         { addTodo }
@@ -41,7 +41,12 @@ object TodoList {
         </ul>
       </div>
 
-    lazy val todosSize = todos.map(_.map(t => "=").mkString + ">")
+    lazy val todosSize = items
+      .map(_.map { item =>
+        val color = if (item.isFinished) "green" else "silver"
+
+        <span style={s"color:$color"}>=</span>
+      })
 
     lazy val addTodo =
       <input
